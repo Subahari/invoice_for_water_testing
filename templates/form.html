@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PDF Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-image: url('../uploads/123.jpeg');
+            background-color: rgba(18, 211, 232, 0.8); 
+            /* background-image: url('img_girl.jpg'); */
+            background-size: cover;
+            /* //background-position: center; */
+        }
+        h1, h2 {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        button[type="button"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        #addRowBtn,
+        #clearFormBtn {
+            width: auto;
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .error-message {
+            color: red;
+            margin-top: 5px;
+        }
+        input[type="submit"]:hover {
+        background-color: rgb(85, 102, 104); /* New background color on hover */
+    }
+    </style>
+</head>
+<body style="background-image: url('../uploads/taxinvoice.PNG');">
+    <h1>Enter Your Invoice Details</h1>
+    <form action="/generate_pdf" method="post" id="pdfForm">
+        <label for="name"> Customer Details</label><br>
+        <input type="text" id="name" name="name" required><br>
+        
+        <label for="email">Lab Ref No</label><br>
+        <input type="text" id="labrefno" name="labrefno" required><br>
+        
+        <label for="email">Invoice No</label><br>
+        <input type="text" id="invoiceno" name="invoiceno"><br>
+
+        <label for="client_ref_no">Client Ref No</label><br>
+        <input type="text" id="client_ref_no" name="client_ref_no"><br>
+        
+        <label for="concern">Concern</label><br>
+        <input type="text" id="concern" name="concern" required><br>
+        
+        <label for="date">Date</label><br>
+        <input type="date" id="date" name="date"><br><br>
+        
+        <h2>Description</h2>
+        <table border="1" id="descriptionTable">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Rate (Rs)</th>
+                    <th>Amount (Rs)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!-- <td><input type="text" name="description[]" class="descriptionInput"  /></td> -->
+                    <td>
+                        <select name="description[]" class="descriptionInput" onchange="updateRate(this)">
+                            <option value="">Select Test</option>
+                            <option value="Drinking Water Full testing">Drinking Water Full testing</option>
+                            <option value="Microbial testing">Microbial testing</option>
+                        </select>
+                    </td>
+                    <td><input type="number" name="qty[]" class="qtyInput" /></td>
+                    <td><input type="number" name="rate[]" class="rateInput"  readonly/></td>
+                    <td><input type="number" name="amount[]" class="amountInput" readonly /></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <button type="button" id="addRowBtn">Add Test</button><br>
+        
+
+        <label for="date">Discount(LKR)</label><br>
+        <input type="number" id="discount" name="discount"><br><br>
+        
+        <input type="submit" value="Generate PDF" onclick="validateForm()" style="background-color: rgba(18, 211, 232, 0.8); border-radius: 5px;">
+        <button type="button" id="clearFormBtn">Clear Form</button><br><br>
+    </form>
+    
+    <script>
+        // Function to calculate amount based on qty and rate
+
+        function updateRate(selectElement) {
+    const rateInput = selectElement.closest('tr').querySelector('.rateInput');
+    const selectedOption = selectElement.value;
+
+    if (selectedOption === 'Drinking Water Full testing') {
+        rateInput.value = 4100;
+    } else if (selectedOption === 'Microbial testing') {
+        rateInput.value = 2500;
+    } else {
+        rateInput.value = ''; // Reset rate if no option is selected
+    }
+
+    // Trigger calculation of amount
+    const row = selectElement.closest('tr');
+    calculateAmount(row);
+}
+
+
+        function validateForm() {
+            const name = document.getElementById('name').value;
+            const concern = document.getElementById('concern').value;
+            const nameError = document.getElementById('nameError');
+            
+            if (name.trim() === '') {
+                nameError.textContent = 'Name is required';
+                return false;
+            } else {
+                nameError.textContent = '';
+            }
+            
+            if (concern.trim() === '') {
+                concernError.textContent = 'Concern is required';
+                return false;
+            } else {
+                concernError.textContent = '';
+            }
+            
+            return true;
+        }
+        function calculateAmount(row) {
+            const qty = row.querySelector('.qtyInput').value;
+            const rate = row.querySelector('.rateInput').value;
+            const amount = qty * rate;
+            row.querySelector('.amountInput').value = amount.toFixed(2);
+        }
+
+        // Event listener to calculate amount when quantity or rate changes
+        document.addEventListener('input', function(event) {
+            if (event.target.classList.contains('qtyInput') || event.target.classList.contains('rateInput')) {
+                const row = event.target.closest('tr');
+                calculateAmount(row);
+            }
+        });
+
+        // Event listener to add row dynamically
+        document.getElementById('addRowBtn').addEventListener('click', function() {
+            const tableBody = document.querySelector('#descriptionTable tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+            <td>
+                        <select name="description[]" class="descriptionInput" onchange="updateRate(this)">
+                            <option value="">Select Test</option>
+                            <option value="Drinking Water Full testing">Drinking Water Full testing</option>
+                            <option value="Microbial testing">Microbial testing</option>
+                        </select>
+                    </td>
+                <td><input type="number" name="qty[]" class="qtyInput" /></td>
+                <td><input type="number" name="rate[]" class="rateInput" /></td>
+                <td><input type="number" name="amount[]" class="amountInput" readonly /></td>
+            `;
+            tableBody.appendChild(newRow);
+        });
+
+        // Event listener to clear form
+        document.getElementById('clearFormBtn').addEventListener('click', function() {
+            document.getElementById('pdfForm').reset();
+        });
+    </script>
+</body>
+</html>
