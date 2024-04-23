@@ -202,8 +202,14 @@
 
         // Event listener to clear form
         document.getElementById('clearFormBtn').addEventListener('click', function() {
-            document.getElementById('pdfForm').reset();
-        });
+    // Reset the form
+    document.getElementById('pdfForm').reset();
+    
+    // Remove all dynamically added rows
+    const tableBody = document.querySelector('#descriptionTable tbody');
+    tableBody.innerHTML = ''; // Remove all rows inside tbody
+});
+
     </script>
 </body>
 </html>
