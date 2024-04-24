@@ -135,6 +135,7 @@ def generate_pdf_document(user_name, labrefno, client_ref_no, concern, date, des
 
     for text in additional_text:
         content.append(Paragraph(text))
+        content.append(Spacer(1, 20))
 
 
     content.append(Spacer(1, 12))
