@@ -119,7 +119,8 @@
             </tbody>
         </table>
         
-        <button type="button" id="addRowBtn">Add Test</button><br>
+        <button type="button" id="addRowBtn">Add Test optional</button><br>
+        <button type="button" id="addRowBtnmanually">Add Test Manually</button><br>
         
 
         <!-- <label for="date">Discount(LKR)</label><br>
@@ -192,7 +193,7 @@
             }
         });
 
-        // Event listener to add row dynamically
+        // Event listener to add row dynamically  addRowBtnmanually
         document.getElementById('addRowBtn').addEventListener('click', function() {
             const tableBody = document.querySelector('#descriptionTable tbody');
             const newRow = document.createElement('tr');
@@ -207,6 +208,22 @@
                             <option value="Swimming pool water full test">Swimming pool water full test</option>
                             <option value="Laboratory service charge">Laboratory service charge</option>
                         </select>
+                    </td>
+                <td><input type="number" name="qty[]" class="qtyInput" /></td>
+                <td><input type="number" name="rate[]" class="rateInput" /></td>
+                <td><input type="number" name="amount[]" class="amountInput" readonly /></td>
+            `;
+            tableBody.appendChild(newRow);
+        });
+
+        document.getElementById('addRowBtnmanually').addEventListener('click', function() {
+            const tableBody = document.querySelector('#descriptionTable tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+            <td>
+                        
+
+                        <input type="text" name="description[]" class="descriptionInput" />
                     </td>
                 <td><input type="number" name="qty[]" class="qtyInput" /></td>
                 <td><input type="number" name="rate[]" class="rateInput" /></td>
