@@ -104,7 +104,12 @@
                         <select name="description[]" class="descriptionInput" onchange="updateRate(this)">
                             <option value="">Select Test</option>
                             <option value="Drinking Water Full testing">Drinking Water Full testing</option>
-                            <option value="Microbial testing">Microbial testing</option>
+                            <option value="Waste water full test">Waste water full test</option>
+                            <option value="Drinking water microbiology test">Drinking water microbiology test</option>
+                            <option value="Waste water microbiology test">Waste water microbiology test</option>
+                            <option value="Swimming pool water full test">Swimming pool water full test</option>
+                            <option value="Laboratory service charge">Laboratory service charge</option>
+                            
                         </select>
                     </td>
                     <td><input type="number" name="qty[]" class="qtyInput" /></td>
@@ -117,8 +122,8 @@
         <button type="button" id="addRowBtn">Add Test</button><br>
         
 
-        <label for="date">Discount(LKR)</label><br>
-        <input type="number" id="discount" name="discount"><br><br>
+        <!-- <label for="date">Discount(LKR)</label><br>
+        <input type="number" id="discount" name="discount"><br><br> -->
         
         <input type="submit" value="Generate PDF" onclick="validateForm()" style="background-color: rgba(18, 211, 232, 0.8); border-radius: 5px;">
         <button type="button" id="clearFormBtn">Clear Form</button><br><br>
@@ -132,11 +137,17 @@
     const selectedOption = selectElement.value;
 
     if (selectedOption === 'Drinking Water Full testing') {
-        rateInput.value = 4100;
-    } else if (selectedOption === 'Microbial testing') {
-        rateInput.value = 2500;
-    } else {
-        rateInput.value = ''; // Reset rate if no option is selected
+        rateInput.value = 8000;
+    } else if (selectedOption === 'Waste water full test') {
+        rateInput.value = 9000;
+    } else if (selectedOption === 'Drinking water microbiology test') {
+        rateInput.value = 2500; 
+    }else if (selectedOption === 'Waste water microbiology test') {
+        rateInput.value = 2500; 
+    }else if (selectedOption === 'Swimming pool water full test') {
+        rateInput.value = 4900; 
+    }else if (selectedOption === 'Laboratory service charge') {
+        rateInput.value = 500; 
     }
 
     // Trigger calculation of amount
@@ -190,7 +201,11 @@
                         <select name="description[]" class="descriptionInput" onchange="updateRate(this)">
                             <option value="">Select Test</option>
                             <option value="Drinking Water Full testing">Drinking Water Full testing</option>
-                            <option value="Microbial testing">Microbial testing</option>
+                            <option value="Waste water full test">Waste water full test</option>
+                            <option value="Drinking water microbiology test">Drinking water microbiology test</option>
+                            <option value="Waste water microbiology test">Waste water microbiology test</option>
+                            <option value="Swimming pool water full test">Swimming pool water full test</option>
+                            <option value="Laboratory service charge">Laboratory service charge</option>
                         </select>
                     </td>
                 <td><input type="number" name="qty[]" class="qtyInput" /></td>

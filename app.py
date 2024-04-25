@@ -33,11 +33,13 @@ def generate_pdf():
 
     # Calculate amounts and convert to float
     amounts = [float(qty) * float(rate) for qty, rate in zip(qtys, rates)]
-    discount = float(request.form['discount'])
+    # discount = float(request.form['discount'])
+    
 
     # Calculate total amount
     total_amount = sum(amounts)
-    grand_total=total_amount-discount
+    discount=total_amount*0.18
+    grand_total=total_amount+discount
 
 
     # Generate PDF
@@ -101,8 +103,8 @@ def generate_pdf_document(user_name, labrefno, client_ref_no, concern, date, des
 
     table_data.extend([
         ["", "", "", "Sub Total (LKR)", total_amount],
-        ["", "", "", "Discount Total (LKR)", discount],
-        ["", "", "", "Grand Total (LKR)", grand_total]
+        ["", "", "", "VAT (LKR)", discount],
+        ["", "", "", "Total with VAT (LKR)", grand_total]
     ])
 
     table = Table(table_data)
