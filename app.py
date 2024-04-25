@@ -46,7 +46,7 @@ def generate_pdf():
     pdf_buffer = generate_pdf_document(user_name, labrefno,client_ref_no,concern,date, descriptions, qtys, rates, amounts,total_amount,discount,grand_total,invoiceno)
     
     # Serve PDF to user for download
-    filename = f"{user_name}_{date}_tax_invoice.pdf"
+    filename = f"{invoiceno}_{user_name}_{date}_tax_invoice.pdf"
     response = make_response(pdf_buffer.getvalue())
     response.headers['Content-Disposition'] = 'attachment; filename="{}"'.format(filename)
     response.headers['Content-type'] = 'application/pdf'
